@@ -1,0 +1,92 @@
+# Global settings
+&GLOBAL
+ ECHO_INPUT .false.
+ PRINT_LEVEL low
+ PROGRAM_NAME cp2k
+ PROJECT_NAME __GLOBAL__PROJECT_NAME__
+ RUN_TYPE energy
+ SAVE_MEM .true.
+ &TIMINGS
+  THRESHOLD 1.0e-3
+ &END
+&END GLOBAL
+# Energy & forces calculation
+&FORCE_EVAL
+ # Electronic structure
+ METHOD qs
+ STRESS_TENSOR none
+ # DFT settings
+ &DFT
+  # Basis set & pseudopotentials
+  BASIS_SET_FILE_NAME __FORCE_EVAL__DFT__BASIS_SET_FILE_NAME__
+  POTENTIAL_FILE_NAME __FORCE_EVAL__DFT__POTENTIAL_FILE_NAME__
+  # Charge & multiplicity
+  CHARGE __FORCE_EVAL__DFT__CHARGE__
+  SPIN_POLARIZED __FORCE_EVAL__DFT__SPIN_POLARIZED__
+  MULTIPLICITY __FORCE_EVAL__DFT__MULTIPLICITY__
+  # Realspace multi-grids
+  &MGRID
+   CUTOFF __FORCE_EVAL__DFT__MGRID__CUTOFF__
+   REL_CUTOFF __FORCE_EVAL__DFT__MGRID__REL_CUTOFF__
+  &END MGRID
+  # QuickStep solver setting
+  __FORCE_EVAL__DFT__QS__
+  # SCF procedure
+  &SCF
+   MAX_SCF __FORCE_EVAL__DFT__SCF__MAX_SCF__
+   SCF_GUESS __FORCE_EVAL__DFT__SCF__SCF_GUESS__
+   __FORCE_EVAL__DFT__SCF__
+  &END SCF
+  # Exchange-correlation functional
+  __FORCE_EVAL__DFT__XC__
+  # Poisson solver
+  &POISSON
+   __FORCE_EVAL__DFT__POISSON__
+  &END POISSON
+ &END DFT
+ # System description
+ &SUBSYS
+  # Cell vectors [A]
+  &CELL
+   ABC __FORCE_EVAL__SUBSYS__CELL__A__ __FORCE_EVAL__SUBSYS__CELL__B__ __FORCE_EVAL__SUBSYS__CELL__C__
+   ALPHA_BETA_GAMMA 90.0 90.0 90.0
+   PERIODIC none
+  &END CELL
+  # Atomic types
+  __FORCE_EVAL__SUBSYS__KIND__
+  # Coordinates [A]
+  &COORD
+   __FORCE_EVAL__SUBSYS__COORD__
+  &END COORD
+ &END SUBSYS
+ # Electronic coupling
+ &PROPERTIES
+  &ET_COUPLING
+   # POD
+   &PROJECTION
+    # First monomer
+    &BLOCK
+     ATOMS  __M1_start__..__M1_stop__
+     NELECTRON __M1_NELECTRON__
+     &PRINT
+      &MO_CUBES
+       MO_LIST __M1MO_start__..__M1MO_stop__
+       STRIDE 5
+      &END MO_CUBES
+     &END PRINT
+    &END BLOCK
+    # Second monomer
+    &BLOCK
+     ATOMS  __M2_start__..__M2_stop__
+     NELECTRON __M2_NELECTRON__
+     &PRINT
+      &MO_CUBES
+       MO_LIST __M2MO_start__..__M2MO_stop__
+       STRIDE 5
+      &END MO_CUBES
+     &END PRINT
+    &END BLOCK
+   &END PROJECTION
+  &END ET_COUPLING
+ &END PROPERTIES
+&END FORCE_EVAL
