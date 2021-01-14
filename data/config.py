@@ -7,6 +7,30 @@ from src.utils import *
 # coordinates dictionaries: keys correspond to xyz file paths;
 # values hold descriptive comments
 
+pyrene={
+    'data/dimers/pyrene_cofacial_3.5A.xyz':'cofacial_3.5A',
+    'data/dimers/pyrene_coplanar.xyz':'coplanar',
+}
+
+pyrene_Ac2={
+    'data/dimers/pyrene_Ac2_cofacial_3.5A.xyz':'cofacial_3.5A',
+    'data/dimers/pyrene_Ac2_coplanar.xyz':'coplanar',
+}
+
+pyrene_db={
+    'data/dimers/pyrene_dumbbell_000deg.xyz':'rotated_0deg',
+    'data/dimers/pyrene_dumbbell_005deg.xyz':'rotated_5deg',
+    'data/dimers/pyrene_dumbbell_010deg.xyz':'rotated_10deg',
+    'data/dimers/pyrene_dumbbell_015deg.xyz':'rotated_15deg',
+    'data/dimers/pyrene_dumbbell_020deg.xyz':'rotated_20deg',
+    'data/dimers/pyrene_dumbbell_025deg.xyz':'rotated_25deg',
+    'data/dimers/pyrene_dumbbell_030deg.xyz':'rotated_30deg',
+    'data/dimers/pyrene_dumbbell_035deg.xyz':'rotated_35deg',
+    'data/dimers/pyrene_dumbbell_040deg.xyz':'rotated_40deg',
+    'data/dimers/pyrene_dumbbell_045deg.xyz':'rotated_45deg',
+    'data/dimers/pyrene_dumbbell_090deg.xyz':'rotated_90deg',
+}
+
 anthracene={
     'data/dimers/3cene_3.5A.xyz':'cofacial_3.5A',
     'data/dimers/3cene_4.0A.xyz':'cofacial_4.0A',
@@ -57,26 +81,31 @@ porphyrin={
 
 #--------------------------------------------------------------------
 
-# basis set and pseudopotentials
-
-#basis='DZVP-GTH'
-basis='TZVP-GTH'
-
-potential='GTH-PBE'
-
-#--------------------------------------------------------------------
-
 # dataset dictionaries
+
+pyrene_dataset={
+    'pyrene_neutral':{
+        'src':pyrene,
+        'atoms':[26,26],
+        'electrons':[74,74],
+    },
+    'pyrene_Ac2_neutral':{
+        'src':pyrene_Ac2,
+        'atoms':[34,34],
+        'electrons':[106,106],
+    },
+    'pyrene_db_neutral':{
+        'src':pyrene_db,
+        'atoms':[33,33],
+        'electrons':[105,105],
+    },
+}
 
 HAB7minus={
     'anthracene_charged':{
         'src':anthracene,
         'atoms':[24,24],
         'electrons':[66,66],
-        'kinds':{
-            'C':{'BASIS_SET':basis,'POTENTIAL':potential},
-            'H':{'BASIS_SET':basis,'POTENTIAL':potential},
-        },
         '__FORCE_EVAL__DFT__CHARGE__':-1,
         '__FORCE_EVAL__DFT__SPIN_POLARIZED__':'.true.',
         '__FORCE_EVAL__DFT__MULTIPLICITY__':2,
@@ -176,11 +205,92 @@ driver={
         '__FORCE_EVAL__DFT__XC__':blocks['XC_HSE06'],
         
     },
+    
+    'LRC-wPBEh-GTH':{
+        
+        'template':'templates/dft_spin_pod.txt',
+        
+        '__FORCE_EVAL__DFT__BASIS_SET_FILE_NAME__':'GTH_BASIS_SETS',
+        '__FORCE_EVAL__DFT__POTENTIAL_FILE_NAME__':'POTENTIAL',
+        '__FORCE_EVAL__DFT__MGRID__CUTOFF__':450.0,
+        '__FORCE_EVAL__DFT__MGRID__REL_CUTOFF__':75.0,
+        '__FORCE_EVAL__DFT__SCF__MAX_SCF__':1000,
+        '__FORCE_EVAL__DFT__SCF__SCF_GUESS__':'restart',
+        '__FORCE_EVAL__DFT__POISSON__':blocks['POISSON_MT'],
+        '__FORCE_EVAL__DFT__QS__':blocks['QS_HFX'],
+        '__FORCE_EVAL__DFT__SCF__':blocks['SCF_OT_CG'],
+        '__FORCE_EVAL__DFT__XC__':blocks['XC_LRC-wPBEh'],
+        
+    },
+    
+    'BLYP-GTH':{
+        
+        'template':'templates/dft_spin_pod.txt',
+        
+        '__FORCE_EVAL__DFT__BASIS_SET_FILE_NAME__':'GTH_BASIS_SETS',
+        '__FORCE_EVAL__DFT__POTENTIAL_FILE_NAME__':'POTENTIAL',
+        '__FORCE_EVAL__DFT__MGRID__CUTOFF__':450.0,
+        '__FORCE_EVAL__DFT__MGRID__REL_CUTOFF__':75.0,
+        '__FORCE_EVAL__DFT__SCF__MAX_SCF__':1000,
+        '__FORCE_EVAL__DFT__SCF__SCF_GUESS__':'atomic',
+        '__FORCE_EVAL__DFT__POISSON__':blocks['POISSON_MT'],
+        '__FORCE_EVAL__DFT__QS__':blocks['QS_GGA'],
+        '__FORCE_EVAL__DFT__SCF__':blocks['SCF_OT_CG'],
+        '__FORCE_EVAL__DFT__XC__':blocks['XC_BLYP'],
+        
+    },
+    
+    'B3LYP-GTH':{
+        
+        'template':'templates/dft_spin_pod.txt',
+        
+        '__FORCE_EVAL__DFT__BASIS_SET_FILE_NAME__':'GTH_BASIS_SETS',
+        '__FORCE_EVAL__DFT__POTENTIAL_FILE_NAME__':'POTENTIAL',
+        '__FORCE_EVAL__DFT__MGRID__CUTOFF__':450.0,
+        '__FORCE_EVAL__DFT__MGRID__REL_CUTOFF__':75.0,
+        '__FORCE_EVAL__DFT__SCF__MAX_SCF__':1000,
+        '__FORCE_EVAL__DFT__SCF__SCF_GUESS__':'restart',
+        '__FORCE_EVAL__DFT__POISSON__':blocks['POISSON_MT'],
+        '__FORCE_EVAL__DFT__QS__':blocks['QS_HFX'],
+        '__FORCE_EVAL__DFT__SCF__':blocks['SCF_OT_CG'],
+        '__FORCE_EVAL__DFT__XC__':blocks['XC_B3LYP'],
+        
+    },
+    
+    'wB97x-GTH':{
+        
+        'template':'templates/dft_spin_pod.txt',
+        
+        '__FORCE_EVAL__DFT__BASIS_SET_FILE_NAME__':'GTH_BASIS_SETS',
+        '__FORCE_EVAL__DFT__POTENTIAL_FILE_NAME__':'POTENTIAL',
+        '__FORCE_EVAL__DFT__MGRID__CUTOFF__':450.0,
+        '__FORCE_EVAL__DFT__MGRID__REL_CUTOFF__':75.0,
+        '__FORCE_EVAL__DFT__SCF__MAX_SCF__':1000,
+        '__FORCE_EVAL__DFT__SCF__SCF_GUESS__':'restart',
+        '__FORCE_EVAL__DFT__POISSON__':blocks['POISSON_MT'],
+        '__FORCE_EVAL__DFT__QS__':blocks['QS_HFX'],
+        '__FORCE_EVAL__DFT__SCF__':blocks['SCF_OT_CG'],
+        '__FORCE_EVAL__DFT__XC__':blocks['XC_wB97x'],
+        
+    },
+    
+    'HSE06-GTH_OUTER_SCF':{
+        
+        'template':'templates/dft_spin_pod.txt',
+        
+        '__FORCE_EVAL__DFT__BASIS_SET_FILE_NAME__':'GTH_BASIS_SETS',
+        '__FORCE_EVAL__DFT__POTENTIAL_FILE_NAME__':'POTENTIAL',
+        '__FORCE_EVAL__DFT__MGRID__CUTOFF__':450.0,
+        '__FORCE_EVAL__DFT__MGRID__REL_CUTOFF__':75.0,
+        '__FORCE_EVAL__DFT__SCF__MAX_SCF__':100,
+        '__FORCE_EVAL__DFT__SCF__SCF_GUESS__':'restart',
+        '__FORCE_EVAL__DFT__POISSON__':blocks['POISSON_MT'],
+        '__FORCE_EVAL__DFT__QS__':blocks['QS_HFX'],
+        '__FORCE_EVAL__DFT__SCF__':blocks['SCF_OT_CG_OUTER'],
+        '__FORCE_EVAL__DFT__XC__':blocks['XC_HSE06'],
+        
+    },
 }
 
 #--------------------------------------------------------------------
-
-# store basis and potential to driver dict
-driver['basis']=basis
-driver['potential']=potential
 

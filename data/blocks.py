@@ -41,6 +41,22 @@ blocks={
     ' &END\n'
     '&END',
     
+    'SCF_OT_CG_OUTER':
+    'EPS_SCF 1.0e-6\n'
+    '&OT on\n'
+    ' MINIMIZER cg\n'
+    ' PRECONDITIONER full_all\n'
+    ' ENERGY_GAP 0.01\n'
+    '&END OT\n'
+    '&OUTER_SCF\n'
+    ' EPS_SCF 1.0e-6\n'
+    ' MAX_SCF 20\n'
+    '&END OUTER_SCF\n'
+    '&PRINT\n'
+    ' &RESTART on\n'
+    ' &END\n'
+    '&END',
+    
     'XC_PBE':
     '&XC\n'
     ' &XC_FUNCTIONAL pbe\n'
@@ -85,6 +101,60 @@ blocks={
     '   OMEGA 0.11\n'
     '  &END INTERACTION_POTENTIAL\n'
     ' &END HF\n'
+    '&END XC\n',
+    
+    'XC_LRC-wPBEh':
+    '&XC\n'
+    ' &XC_FUNCTIONAL\n'
+    '  &LIBXC\n'
+    '   FUNCTIONAL HYB_GGA_XC_LRC_WPBEH\n'
+    '  &END LIBXC\n'
+    ' &END XC_FUNCTIONAL\n'
+    ' &HF\n'
+    '  &SCREENING\n'
+    '   EPS_SCHWARZ 1.0E-10\n'
+    '   SCREEN_ON_INITIAL_P .false.\n'
+    '  &END\n'
+    '  &INTERACTION_POTENTIAL\n'
+    '   POTENTIAL_TYPE mix_cl\n'
+    '   OMEGA 0.2\n'
+    '   SCALE_COULOMB 0.2\n'
+    '   SCALE_LONGRANGE 0.8\n'
+    '  &END INTERACTION_POTENTIAL\n'
+    ' &END HF\n'
+    '&END XC\n',
+    
+    'XC_wB97x':
+    '&XC\n'
+    ' &XC_FUNCTIONAL\n'
+    '  &LIBXC\n'
+    '   FUNCTIONAL HYB_GGA_XC_WB97X\n'
+    '  &END LIBXC\n'
+    ' &END XC_FUNCTIONAL\n'
+    ' &HF\n'
+    '  &SCREENING\n'
+    '   EPS_SCHWARZ 1.0E-10\n'
+    '   SCREEN_ON_INITIAL_P .false.\n'
+    '  &END\n'
+    '  &INTERACTION_POTENTIAL\n'
+    '   POTENTIAL_TYPE mix_cl\n'
+    '   OMEGA 0.3\n'
+    '   SCALE_COULOMB 0.157706\n'
+    '   SCALE_LONGRANGE 0.842294\n'
+    '  &END INTERACTION_POTENTIAL\n'
+    ' &END HF\n'
+    '&END XC\n',
+    
+    'XC_B3LYP':
+    '&XC\n'
+    ' &XC_FUNCTIONAL b3lyp\n'
+    ' &END XC_FUNCTIONAL\n'
+    '&END XC\n',
+    
+    'XC_BLYP':
+    '&XC\n'
+    ' &XC_FUNCTIONAL blyp\n'
+    ' &END XC_FUNCTIONAL\n'
     '&END XC\n',
     
 }

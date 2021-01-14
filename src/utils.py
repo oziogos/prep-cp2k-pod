@@ -29,9 +29,9 @@ def replace_patterns(source,target,text):
                 else:
                     source[counter]=source[counter].replace(target,text.replace('\n','\n'+''.join([' ' for i in range(indentation)])))
     return indentation
-def create_input(system_dict,system,driver_dict,driver,vacuum=8.0,occ_offset=3,virt_offset=4,hpc=None,restart=None):
+def create_input(system_dict,system,driver_dict,driver,basis,potential,vacuum=8.0,occ_offset=3,virt_offset=4,hpc=None,restart=None):
     
-    apply_defaults(system_dict,driver_dict["basis"],driver_dict["potential"])
+    apply_defaults(system_dict,basis,potential)
     
     # store template to memory
     fp=open(f'{driver_dict[driver]["template"]}',mode='r')
@@ -97,7 +97,7 @@ def create_input(system_dict,system,driver_dict,driver,vacuum=8.0,occ_offset=3,v
     for xyz,info in system_dict[system]['src'].items():
         
         # resolve simulation name
-        name=f'{system}_{info}_{driver_dict["basis"]}_{driver}'
+        name=f'{system}_{info}_{basis}_{driver}'
         # replace name
         replace_patterns(template,'__GLOBAL__PROJECT_NAME__',name)
         
@@ -147,9 +147,9 @@ def create_input(system_dict,system,driver_dict,driver,vacuum=8.0,occ_offset=3,v
         # write to file
         if os.path.exists('output')==False:
             os.mkdir('output')
-        if os.path.exists(f'output/{system}_{driver_dict["basis"]}_{driver}')==False:
-            os.mkdir(f'output/{system}_{driver_dict["basis"]}_{driver}')
-        outfile=f'output/{system}_{driver_dict["basis"]}_{driver}/{name}.inp'
+        if os.path.exists(f'output/{system}_{basis}_{driver}')==False:
+            os.mkdir(f'output/{system}_{basis}_{driver}')
+        outfile=f'output/{system}_{basis}_{driver}/{name}.inp'
         with open(outfile,mode='w') as fp:
             for i in template:
                 print(i,end='',file=fp)
@@ -164,12 +164,13 @@ def create_input(system_dict,system,driver_dict,driver,vacuum=8.0,occ_offset=3,v
 
 def apply_defaults(input_dict,basis,potential):
     for key,value in input_dict.items():
-        if 'kinds' not in value:
-            fp=open(list(value['src'])[0],mode='r')
-            xyz=fp.readlines()
-            fp.close()
-            species=list(set([i.strip().split()[0] for i in xyz][2:int(xyz[0])+2]))
-            value['kinds']={i:{'BASIS_SET':basis,'POTENTIAL':potential} for i in species}
+        #if 'kinds' not in value:
+        fp=open(list(value['src'])[0],mode='r')
+        xyz=fp.readlines()
+        fp.close()
+        #species=list(set([i.strip().split()[0] for i in xyz][2:int(xyz[0])+2]))
+        species=list(set([i.split()[0] for i in xyz[2::]]))
+        value['kinds']={i:{'BASIS_SET':basis,'POTENTIAL':potential} for i in species}
         if '__FORCE_EVAL__DFT__CHARGE__' not in value:
             value['__FORCE_EVAL__DFT__CHARGE__']=0
         if '__FORCE_EVAL__DFT__SPIN_POLARIZED__' not in value:
